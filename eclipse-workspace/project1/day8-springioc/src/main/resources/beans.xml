@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+<!-- bean definitions here -->
+<bean name="a" class="com.tcs.ioc.A" init-method="myInit" destroy-method="myDestroy"></bean> <!-- Asking to create a bean from XML -->
+<bean name="b" class="com.tcs.ioc.B">
+<property name="a" ref="a"></property> <!-- this a is declare in B class, then calls a setter method -->
+</bean>
+
+<bean name="c" class="com.tcs.ioc.C" scope="prototype"   >
+<constructor-arg ref="a"></constructor-arg> <!--  constuctor injection -->
+</bean>
+
+
+</beans>
