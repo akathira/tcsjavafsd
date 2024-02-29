@@ -1,0 +1,7 @@
+package com.tcs.designpattern;
+
+public class CarFactory { //Factory pattern
+	
+	public Car makeACar(String brand)
+
+}

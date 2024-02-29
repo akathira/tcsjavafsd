@@ -1,0 +1,6 @@
+package com.tcs.designpattern;
+
+public class TestConnection {
+
+	Connection  con = new Connection();
+}
