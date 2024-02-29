@@ -1,0 +1,12 @@
+<div>
+    <h2>Item List</h2>
+  
+    <ul>
+      <li *ngFor="let item of items">{{ item }}</li>
+    </ul>
+  
+    <div>
+      <input type="text" [(ngModel)]="newItem" placeholder="New Item">
+      <button (click)="addItem()">Add Item</button>
+    </div>
+  </div>

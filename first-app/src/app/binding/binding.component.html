@@ -1,0 +1,21 @@
+<p>binding works!</p>
+ 
+<header> TCS Java FSD Program</header>
+ 
+<hr>
+<h1> PRODUCTS </h1>
+<h1> Available PRODUCTS</h1>
+<h3> Product ID : {{productId}}</h3>
+<h3> Description : {{description}}</h3>
+<h3> Quantity : {{qty}}</h3>
+<h3> Price : {{price}}</h3>
+ 
+<p style="background-color: skyblue;"> Testing </p>
+ 
+ 
+<div *ngIf="isqtyavailable; else notavail"> 
+<h3> Available: <span [style.background-color]="available"> 
+&nbsp;&nbsp;&nbsp; </span></h3></div> <ng-template #notavail> 
+<h3>Available : <span [style.background-color]="notavailable"> 
+&nbsp;&nbsp;&nbsp; </span></h3> </ng-template>
+ 

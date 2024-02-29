@@ -1,0 +1,17 @@
+<p>retrieve works!</p>
+
+<h2>Products List</h2>
+<table border="2"  style="padding:10px;">
+
+    <thead>
+        <th>ID</th>
+        <th>Description</th>
+        <th>price</th>
+        </thead>
+
+        <tr *ngFor="let product of products">
+            <td>{{product.productId}}</td>
+            <td>{{product.description}}</td>
+            <td>{{product.price}}</td>
+            </tr>
+</table>
