@@ -1,0 +1,63 @@
+package com.tcs.bms.service;
+
+import java.util.Random;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.tcs.bms.dto.LoginRequest;
+import com.tcs.bms.entity.User;
+import com.tcs.bms.repository.AccountRepository;
+import com.tcs.bms.repository.UserRepository;
+import com.tcs.bms.entity.Account;
+
+@Service
+public class UserService {
+
+	@Autowired
+	private UserRepository repository;
+
+	@Autowired
+	private AccountRepository accountRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	public User createUser(User user) {
+
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		User userDetails = repository.save(user);
+
+		Random random = new Random();
+		long lowerBound = 1000000000L;
+		long upperBound = 9999999999L;
+		long randomNum = lowerBound + (long) (random.nextDouble() * (upperBound - lowerBound));
+		String accountNumber = String.valueOf(randomNum);
+
+		do {
+			long randomNumcheck = lowerBound + (long) (random.nextDouble() * (upperBound - lowerBound));
+			String randomNocheck = String.valueOf(randomNum);
+		} while (accountNumber.equals(accountRepository.findByAccountNumber(accountNumber)));
+
+		Account accountObject = new Account();
+		accountObject.setAccountNumber(accountNumber);
+		accountObject.setBalance(0.0);
+		Account account = accountRepository.save(accountObject);
+
+		user.setAccount(account);
+		repository.save(user);
+
+		return user;
+	}
+
+}

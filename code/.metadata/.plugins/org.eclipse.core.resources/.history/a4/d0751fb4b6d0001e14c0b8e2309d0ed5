@@ -1,0 +1,59 @@
+package com.tcs.bms.service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.tcs.bms.dto.LoginRequest;
+import com.tcs.bms.entity.User;
+import com.tcs.bms.repository.UserRepository;
+
+
+@Service
+public class UserService {
+	
+	@Autowired
+	private JwtService jwtService;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+
+    @Autowired
+    private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    public String registerUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        repository.save(user);
+        return "user added to system ";
+    }
+    
+    @PostMapping("/authenticate")
+	public ResponseEntity<String> authenticateAndGetToken(@RequestBody LoginRequest loginRequest) {
+		String username = loginRequest.getAccountNumber();
+		String password = loginRequest.getPassword();
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
+		}
+		String jwt = jwtService.generateToken(username);
+		return new ResponseEntity<String>(jwt, HttpStatus.OK);
+
+	}
+}

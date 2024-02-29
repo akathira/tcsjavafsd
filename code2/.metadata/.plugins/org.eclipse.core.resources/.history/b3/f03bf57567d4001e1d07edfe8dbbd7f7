@@ -1,0 +1,5 @@
+package com.tcs.boot.model;
+
+public class AuthenticationResponse {
+
+}

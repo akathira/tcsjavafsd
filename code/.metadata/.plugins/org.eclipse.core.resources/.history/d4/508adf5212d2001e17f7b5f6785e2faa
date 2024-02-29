@@ -1,0 +1,32 @@
+package com.tcs.bms.controller;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import com.tcs.bms.dto.PasswordReset;
+
+
+@RestController
+@RequestMapping("/bms")
+public class AuthenticationController {
+
+	@PreAuthorize("hasAuthority('admin')")
+	@GetMapping("/admin")
+	public String admin() {
+		return "Welcome to Admin Module";
+	}
+
+	@PreAuthorize("hasAuthority('user')")
+	@GetMapping("/user")
+	public String user() {
+		return "Welcome to User Module";
+	}
+
+	@PreAuthorize("hasAuthority('user')")
+	@GetMapping("/user/passwordreset")
+	public String passwordreset(PasswordReset Reset) {
+		return "Welcome to User Module";
+	}
+
+	
+}

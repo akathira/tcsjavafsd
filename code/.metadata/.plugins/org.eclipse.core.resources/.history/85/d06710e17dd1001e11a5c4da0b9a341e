@@ -1,0 +1,23 @@
+package com.tcs.bms.controller;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/bms")
+public class AuthenticationController {
+
+	@GetMapping("/admin")
+	public String admin() {
+		return "Welcome admin";
+	}
+
+	@PreAuthorize("hasAuthority('user')")
+	@GetMapping("/user")
+	public String user() {
+		return "Welcome user";
+	}
+
+	
+}

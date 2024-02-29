@@ -1,0 +1,41 @@
+package com.tcs.boot.filters;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class JwtFilter {
+
+	@Autowired
+	private MyUserDetailsService userDetailsService;
+	
+	@Autowired
+	private JwtUtil jwtUtil;
+	
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		System.out.println("from doFilterInternal .............");
+		final String authorizationHeader = request.getHeader("Authorization");
+		String username = null;
+		String jwt = null;
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			jwt = authorizationHeader.substring(7);
+			username = jwtUtil.extractUsername(jwt);
+			System.out.println(username);
+		}
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+			System.out.println(userDetails);
+			System.out.println(userDetails.getUsername());
+			if (jwtUtil.validateToken(jwt, userDetails)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
+						new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			   SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);	
+			}
+		}else {
+			System.out.println("hmmmmmmmmmmm");
+		}
+			filterChain.doFilter(request, response);
+		}
+}

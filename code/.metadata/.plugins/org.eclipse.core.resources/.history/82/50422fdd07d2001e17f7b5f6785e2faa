@@ -1,0 +1,5 @@
+package com.bms.security.resource;
+
+public class EmployeeResource {
+
+}
